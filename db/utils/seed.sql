@@ -8,5 +8,6 @@ INSERT INTO cashplay.customer (id, first_name, last_name, created_at) VALUES
 
 ALTER SEQUENCE cashplay.customer_id_seq RESTART WITH 7;
 
+GRANT SELECT ON TABLE cashplay.customer to cashplay_anonymous;
 
 SELECT * FROM cashplay.register_person('jalal'::TEXT,'hosseini'::TEXT,'jalalhosseiny@gmail.com'::TEXT,'admin'::TEXT);
