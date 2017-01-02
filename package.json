@@ -5,13 +5,7 @@
   "license": "MIT",
 
   "scripts": {
-    "dev":"export PGPASSWORD=6220617 && npm run db:drop && npm run db:create && npm run db:seed && npm run db:serve",
-    "db:dev":"export PGPASSWORD=6220617 && npm run db:drop && npm run db:create && npm run db:seed",
-    "db:drop":"psql -U jalal -d cashplay_dev -a -f ./db/utils/drop-schema.sql",
-    "db:seed":"psql -U jalal -d cashplay_dev -a -f ./db/utils/seed.sql",
-    "db:create":"psql -U jalal -d cashplay_dev -a -f ./db/utils/create-schema.sql",
-    "db:regen":"psql -U jalal -d cashplay_dev -a -f ./db/utils/regen.sql",
-    "db:serve":"postgraphql -c posgres://jalal:6220617@localhost:5432/cashplay_dev -s cashplay -r cashplay_anonymous -o http://localhost:4000  -w -i /graphiql",
-    "db:serve2":"postgrest postgres://jalal:6220617@localhost:5432/cashplay_dev -a cashplay_user -s cashplay -p 6464"
+    "seed":"psql -U jalal -d cashplay_dev -a -f ./db/utils/seed.sql",
+    "serve":"postgrest postgres://jalal:6220617@localhost:5432/cashplay_dev -a cashplay_user -s cashplay -p 6464"
   }
 }
