@@ -2,21 +2,21 @@
 1 verbose cli [ '/usr/local/Cellar/node/7.1.0/bin/node',
 1 verbose cli   '/usr/local/bin/npm',
 1 verbose cli   'run',
-1 verbose cli   'db:serve' ]
+1 verbose cli   'db:serve2' ]
 2 info using npm@3.10.9
 3 info using node@v7.1.0
-4 verbose run-script [ 'predb:serve', 'db:serve', 'postdb:serve' ]
-5 info lifecycle schema@1.0.0~predb:serve: schema@1.0.0
-6 silly lifecycle schema@1.0.0~predb:serve: no script for predb:serve, continuing
-7 info lifecycle schema@1.0.0~db:serve: schema@1.0.0
-8 verbose lifecycle schema@1.0.0~db:serve: unsafe-perm in lifecycle true
-9 verbose lifecycle schema@1.0.0~db:serve: PATH: /usr/local/lib/node_modules/npm/bin/node-gyp-bin:/Users/jalal/projects/cashplay/react-relay/data/schema/node_modules/.bin:/usr/local/Cellar/node/7.1.0/bin:./bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/games
-10 verbose lifecycle schema@1.0.0~db:serve: CWD: /Users/jalal/projects/cashplay/react-relay/data/schema
-11 silly lifecycle schema@1.0.0~db:serve: Args: [ '-c',
-11 silly lifecycle   'postgraphql -c posgres://cashplay_postgraphql:6220617@localhost:5432/cashplay_dev -s cashplay -r cashplay_admin -o http://localhost:3000 --classic-ids -e foobar -t cashplay.jwt_token -w -i /graphiql' ]
-12 silly lifecycle schema@1.0.0~db:serve: Returned: code: 1  signal: null
-13 info lifecycle schema@1.0.0~db:serve: Failed to exec db:serve script
-14 verbose stack Error: schema@1.0.0 db:serve: `postgraphql -c posgres://cashplay_postgraphql:6220617@localhost:5432/cashplay_dev -s cashplay -r cashplay_admin -o http://localhost:3000 --classic-ids -e foobar -t cashplay.jwt_token -w -i /graphiql`
+4 verbose run-script [ 'predb:serve2', 'db:serve2', 'postdb:serve2' ]
+5 info lifecycle schema@1.0.0~predb:serve2: schema@1.0.0
+6 silly lifecycle schema@1.0.0~predb:serve2: no script for predb:serve2, continuing
+7 info lifecycle schema@1.0.0~db:serve2: schema@1.0.0
+8 verbose lifecycle schema@1.0.0~db:serve2: unsafe-perm in lifecycle true
+9 verbose lifecycle schema@1.0.0~db:serve2: PATH: /usr/local/lib/node_modules/npm/bin/node-gyp-bin:/Users/jalal/projects/cashplay/schema/node_modules/.bin:/usr/local/Cellar/node/7.1.0/bin:./bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/games
+10 verbose lifecycle schema@1.0.0~db:serve2: CWD: /Users/jalal/projects/cashplay/schema
+11 silly lifecycle schema@1.0.0~db:serve2: Args: [ '-c',
+11 silly lifecycle   'postgrest postgres://jalal:6220617@localhost:5432/cashplay_dev -a cashplay_user -s cashplay ' ]
+12 silly lifecycle schema@1.0.0~db:serve2: Returned: code: 1  signal: null
+13 info lifecycle schema@1.0.0~db:serve2: Failed to exec db:serve2 script
+14 verbose stack Error: schema@1.0.0 db:serve2: `postgrest postgres://jalal:6220617@localhost:5432/cashplay_dev -a cashplay_user -s cashplay `
 14 verbose stack Exit status 1
 14 verbose stack     at EventEmitter.<anonymous> (/usr/local/lib/node_modules/npm/lib/utils/lifecycle.js:255:16)
 14 verbose stack     at emitTwo (events.js:106:13)
@@ -27,20 +27,20 @@
 14 verbose stack     at maybeClose (internal/child_process.js:885:16)
 14 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:226:5)
 15 verbose pkgid schema@1.0.0
-16 verbose cwd /Users/jalal/projects/cashplay/react-relay/data/schema
+16 verbose cwd /Users/jalal/projects/cashplay/schema
 17 error Darwin 16.1.0
-18 error argv "/usr/local/Cellar/node/7.1.0/bin/node" "/usr/local/bin/npm" "run" "db:serve"
+18 error argv "/usr/local/Cellar/node/7.1.0/bin/node" "/usr/local/bin/npm" "run" "db:serve2"
 19 error node v7.1.0
 20 error npm  v3.10.9
 21 error code ELIFECYCLE
-22 error schema@1.0.0 db:serve: `postgraphql -c posgres://cashplay_postgraphql:6220617@localhost:5432/cashplay_dev -s cashplay -r cashplay_admin -o http://localhost:3000 --classic-ids -e foobar -t cashplay.jwt_token -w -i /graphiql`
+22 error schema@1.0.0 db:serve2: `postgrest postgres://jalal:6220617@localhost:5432/cashplay_dev -a cashplay_user -s cashplay `
 22 error Exit status 1
-23 error Failed at the schema@1.0.0 db:serve script 'postgraphql -c posgres://cashplay_postgraphql:6220617@localhost:5432/cashplay_dev -s cashplay -r cashplay_admin -o http://localhost:3000 --classic-ids -e foobar -t cashplay.jwt_token -w -i /graphiql'.
+23 error Failed at the schema@1.0.0 db:serve2 script 'postgrest postgres://jalal:6220617@localhost:5432/cashplay_dev -a cashplay_user -s cashplay '.
 23 error Make sure you have the latest version of node.js and npm installed.
 23 error If you do, this is most likely a problem with the schema package,
 23 error not with npm itself.
 23 error Tell the author that this fails on your system:
-23 error     postgraphql -c posgres://cashplay_postgraphql:6220617@localhost:5432/cashplay_dev -s cashplay -r cashplay_admin -o http://localhost:3000 --classic-ids -e foobar -t cashplay.jwt_token -w -i /graphiql
+23 error     postgrest postgres://jalal:6220617@localhost:5432/cashplay_dev -a cashplay_user -s cashplay
 23 error You can get information on how to open an issue for this project with:
 23 error     npm bugs schema
 23 error Or if that isn't available, you can get their info via:
