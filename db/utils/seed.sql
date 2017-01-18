@@ -1,10 +1,10 @@
-INSERT INTO cashplay.customers (id, first_name, last_name, created_at) VALUES
-  (1, 'Sara', 'Powell', '2015-07-03T14:11:30Z'),
-  (2, 'Andrea', 'Fox', '1999-04-04T21:21:42Z'),
-  (3, 'Stephen', 'Banks', '2003-12-09T04:39:10Z'),
-  (4, 'Kathy', 'ban', '2001-11-03T15:37:15Z'),
-  (5, 'Kenneth', 'Williams', '2002-08-16T19:03:47Z'),
-  (6, 'Ann', 'Peterson', '2013-09-24T15:05:29Z');
+INSERT INTO cashplay.customers (id,user_email_fk, first_name, last_name, created_at) VALUES
+  (1,'dev@dev.com','Sara', 'Powell', '2015-07-03T14:11:30Z'),
+  (2,'dev@dev.com','Andrea', 'Fox', '1999-04-04T21:21:42Z'),
+  (3,'dev@dev.com','Stephen', 'Banks', '2003-12-09T04:39:10Z'),
+  (4,'dev@dev.com','Kathy', 'ban', '2001-11-03T15:37:15Z'),
+  (5,'dev@dev.com','Kenneth', 'Williams', '2002-08-16T19:03:47Z'),
+  (6,'dev@dev.com','Ann', 'Peterson', '2013-09-24T15:05:29Z');
 
 SELECT *
 FROM cashplay.signup(

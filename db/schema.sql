@@ -64,12 +64,12 @@ DROP TABLE IF EXISTS cashplay_private.users;
 CREATE TABLE IF NOT EXISTS
   cashplay_private.users (
   first_name TEXT NOT NULL CHECK (length(first_name) < 64),
-  last_name TEXT NOT NULL CHECK (length(first_name) < 64),
-  company TEXT NOT NULL CHECK (length(first_name) < 64),
+  last_name  TEXT NOT NULL CHECK (length(first_name) < 64),
+  company    TEXT NOT NULL CHECK (length(first_name) < 64),
 
-  email TEXT PRIMARY KEY CHECK ( email ~* '^.+@.+\..+$' ),
-  pass  TEXT NOT NULL CHECK (length(pass) < 512),
-  role  NAME NOT NULL CHECK (length(role) < 512)
+  email      TEXT PRIMARY KEY CHECK ( email ~* '^.+@.+\..+$' ),
+  pass       TEXT NOT NULL CHECK (length(pass) < 512),
+  role       NAME NOT NULL CHECK (length(role) < 512)
 );
 -- encrypt pass on insert or update
 CREATE OR REPLACE FUNCTION
@@ -189,12 +189,12 @@ EXECUTE PROCEDURE cashplay_private.send_authenticator();
 --  shows only those users whose roles the currently logged in user has db permission to access.
 CREATE OR REPLACE VIEW cashplay.users AS
   SELECT
-    actual.first_name as first_name,
-    actual.last_name as last_name,
-    actual.company as company,
-    actual.email  AS email,
-    '***' :: TEXT AS pass,
-    actual.role   AS role
+    actual.first_name AS first_name,
+    actual.last_name  AS last_name,
+    actual.company    AS company,
+    actual.email      AS email,
+    '***' :: TEXT     AS pass,
+    actual.role       AS role
 
   FROM cashplay_private.users AS actual,
     (SELECT rolname
@@ -238,9 +238,9 @@ BEGIN
     PERFORM cashplay_private.clearance_for_role(new.role);
 
     INSERT INTO cashplay_private.users
-    (first_name,last_name,company,  email,pass,role)
+    (first_name, last_name, company, email, pass, role)
     VALUES
-      (new.first_name,new.last_name, new.company, new.email,new.pass,new.role);
+      (new.first_name, new.last_name, new.company, new.email, new.pass, new.role);
     RETURN new;
   ELSIF tg_op = 'UPDATE'
     THEN
@@ -251,11 +251,11 @@ BEGIN
       UPDATE cashplay_private.users
       SET
         first_name = new.first_name,
-        last_name = new.last_name,
-        company = new.company,
-        email = new.email,
-        pass  = new.pass,
-        role  = new.role
+        last_name  = new.last_name,
+        company    = new.company,
+        email      = new.email,
+        pass       = new.pass,
+        role       = new.role
       WHERE email = old.email;
       RETURN new;
   ELSIF tg_op = 'DELETE'
@@ -281,8 +281,8 @@ CREATE OR REPLACE FUNCTION
   cashplay.signup(first_name TEXT, last_name TEXT, company TEXT, email TEXT, pass TEXT)
   RETURNS VOID
 AS $$
-INSERT INTO cashplay_private.users (first_name,last_name,company,email, pass, role) VALUES
-  (signup.first_name,signup.last_name,signup.company,signup.email, signup.pass, 'cashplay_user');
+INSERT INTO cashplay_private.users (first_name, last_name, company, email, pass, role) VALUES
+  (signup.first_name, signup.last_name, signup.company, signup.email, signup.pass, 'cashplay_user');
 $$ LANGUAGE SQL;
 
 ---- Generating JWT
@@ -299,7 +299,7 @@ DECLARE
   result cashplay_private.jwt_claims;
 BEGIN
   -- check email and password
-  SELECT cashplay_private.user_role($1,$2)
+  SELECT cashplay_private.user_role($1, $2)
   INTO _role;
   IF _role IS NULL
   THEN
@@ -309,7 +309,7 @@ BEGIN
 
   SELECT
     _role                                          AS role,
-    email                                             AS email,
+    email                                          AS email,
     extract(EPOCH FROM now()) :: INTEGER + 60 * 60 AS exp
   INTO result;
   RETURN result;
@@ -340,22 +340,25 @@ GRANT SELECT ON TABLE pg_authid, cashplay_private.users TO cashplay_anonymous;
 
 GRANT EXECUTE ON FUNCTION
 cashplay.login(TEXT, TEXT),
-cashplay.signup(TEXT,TEXT,TEXT,TEXT, TEXT)
+cashplay.signup(TEXT, TEXT, TEXT, TEXT, TEXT)
 TO cashplay_anonymous;
 
 -------------------------------------------------------------------------------
 -- CUSTOMER
 -------------------------------------------------------------------------------
 
-DROP TABLE IF EXISTS cashplay.customers CASCADE ;
+DROP TABLE IF EXISTS cashplay.customers CASCADE;
 CREATE TABLE cashplay.customers (
-  id         SERIAL PRIMARY KEY,
-  first_name TEXT NOT NULL CHECK (char_length(first_name) < 80),
-  last_name  TEXT NOT NULL CHECK (char_length(last_name) < 80),
-  created_at TIMESTAMP DEFAULT now()
+  id            SERIAL PRIMARY KEY,
+  user_email_fk TEXT REFERENCES cashplay_private.users (email) ON DELETE CASCADE,
+  first_name    TEXT NOT NULL CHECK (char_length(first_name) < 80),
+  last_name     TEXT NOT NULL CHECK (char_length(last_name) < 80),
+  created_at    TIMESTAMP DEFAULT now()
 );
 
-GRANT SELECT ,INSERT ,UPDATE ,DELETE ON cashplay.customers to cashplay_user;
+GRANT SELECT, INSERT, UPDATE, DELETE ON cashplay.customers TO cashplay_user;
+GRANT USAGE ON SEQUENCE cashplay.customers_id_seq TO cashplay_user;
+
 
 CREATE OR REPLACE FUNCTION cashplay.customers_full_name(customers cashplay.customers)
   RETURNS TEXT AS $$
@@ -370,29 +373,58 @@ WHERE customers.first_name ILIKE ('%' || search || '%') OR customers.last_name I
 $$ LANGUAGE SQL STABLE;
 
 CREATE OR REPLACE VIEW cashplay.customer AS
-  SELECT * , cashplay.customers_full_name(cashplay.customers.*) as full_name
+  SELECT
+    *,
+    cashplay.customers_full_name(cashplay.customers.*) AS full_name
   FROM cashplay.customers;
-GRANT SELECT ,INSERT ,UPDATE ,DELETE ON cashplay.customer to cashplay_user;
+GRANT SELECT, INSERT, UPDATE, DELETE ON cashplay.customer TO cashplay_user;
 
 -------------------------------------------------------------------------------
 --ITEM
 -------------------------------------------------------------------------------
 DROP TABLE IF EXISTS cashplay.items;
 CREATE TABLE IF NOT EXISTS cashplay.items (
-  id SERIAL PRIMARY KEY ,
+  id          SERIAL PRIMARY KEY,
   description TEXT
 );
-GRANT SELECT ,INSERT ,UPDATE ,DELETE ON cashplay.items to cashplay_user;
+GRANT SELECT, INSERT, UPDATE, DELETE ON cashplay.items TO cashplay_user;
 -------------------------------------------------------------------------------
 --CURRENCY
 -------------------------------------------------------------------------------
 DROP TABLE IF EXISTS cashplay.currencies;
-CREATE TABLE IF NOT EXISTS cashplay.currencies(
-  id SERIAL PRIMARY KEY,
-  country_code TEXT NOT NULL CHECK (char_length(country_code)<3),
-  currency_code TEXT NOT NULL CHECK (char_length(country_code)<4),
-  we_buy DOUBLE PRECISION DEFAULT 1,
-  we_sell DOUBLE PRECISION DEFAULT 1
+CREATE TABLE IF NOT EXISTS cashplay.currencies (
+  id            SERIAL PRIMARY KEY,
+  country_code  TEXT NOT NULL CHECK (char_length(country_code) < 3),
+  currency_code TEXT NOT NULL CHECK (char_length(country_code) < 4),
+  we_buy        DOUBLE PRECISION DEFAULT 1,
+  we_sell       DOUBLE PRECISION DEFAULT 1
 );
 
+-------------------------------------------------------------------------------
+--TRIGGERS
+-------------------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION cashplay.insert_user_email_fk()
+  RETURNS TRIGGER
+LANGUAGE plpgsql STRICT SECURITY DEFINER AS
+$$
+DECLARE user_email TEXT;
+BEGIN
+  SELECT current_email
+  FROM cashplay_private.current_email()
+  INTO user_email;
+
+  new.user_email_fk:= user_email;
+
+  RETURN new;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS insert_user_email_fk
+ON
+  cashplay.customers;
+CREATE TRIGGER insert_user_email_fk
+BEFORE INSERT ON
+  cashplay.customers
+FOR EACH ROW EXECUTE PROCEDURE cashplay.insert_user_email_fk();
 COMMIT;
+
