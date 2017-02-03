@@ -6,6 +6,6 @@
 
   "scripts": {
     "seed":"psql -U jalal -d cashplay_dev -a -f ./db/utils/seed.sql",
-    "serve":"postgrest postgres://jalal:6220617@localhost:5432/cashplay_dev -a cashplay_anonymous -s cashplay -p 6464"
+    "serve":"postgrest config.yaml"
   }
 }

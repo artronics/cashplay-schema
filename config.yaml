@@ -1,0 +1,21 @@
+db-uri = "postgres://jalal:6220617@localhost:5432/cashplay_dev"
+db-schema = "cashplay"
+db-anon-role = "cashplay_anonymous"
+db-pool = 10
+
+server-host = "*4"
+server-port = 6464
+
+## base url for swagger output
+ server-proxy-uri = "http://localhost:8443/sw"
+
+## choose a secret to enable JWT auth
+## (use "@filename" to load from separate file)
+jwt-secret = "foo"
+secret-is-base64 = false
+
+## limit rows in response
+max-rows = 100
+
+## stored proc to exec immediately after auth
+# pre-request = "stored_proc_name"

@@ -351,6 +351,7 @@ DROP TABLE IF EXISTS cashplay.customers CASCADE;
 CREATE TABLE cashplay.customers (
   id            SERIAL PRIMARY KEY,
   user_email_fk TEXT REFERENCES cashplay_private.users (email) ON DELETE CASCADE,
+  pic           TEXT NOT NULL,
   first_name    TEXT NOT NULL CHECK (char_length(first_name) < 80),
   last_name     TEXT NOT NULL CHECK (char_length(last_name) < 80),
   created_at    TIMESTAMP DEFAULT now()
