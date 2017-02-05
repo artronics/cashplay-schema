@@ -1,0 +1,2 @@
+CREATE SCHEMA IF NOT EXISTS cashplay;
+CREATE SCHEMA IF NOT EXISTS cashplay_private;

@@ -6,6 +6,8 @@
 
   "scripts": {
     "seed":"psql -U jalal -d cashplay_dev -a -f ./db/utils/seed.sql",
-    "serve":"postgrest config.yaml"
+    "serve":"postgrest config.conf",
+    "migrate":"flyway migrate",
+    "delete":"flyway clean"
   }
 }
