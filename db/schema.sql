@@ -403,6 +403,8 @@ CREATE TABLE cashplay.customers (
   last_name     TEXT NOT NULL CHECK (char_length(last_name) < 80),
   created_at    TIMESTAMP DEFAULT now()
 );
+ALTER TABLE cashplay.customers ENABLE ROW LEVEL SECURITY ;
+
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON cashplay.customers TO cashplay_user;
 GRANT USAGE ON SEQUENCE cashplay.customers_id_seq TO cashplay_user;
@@ -426,6 +428,19 @@ CREATE OR REPLACE VIEW cashplay.customer AS
     cashplay.customers_full_name(cashplay.customers.*) AS full_name
   FROM cashplay.customers;
 GRANT SELECT, INSERT, UPDATE, DELETE ON cashplay.customer TO cashplay_user;
+
+-------------------------------------------------------------------------------
+--CUSTOMERS_PICS
+-------------------------------------------------------------------------------
+DROP TABLE IF EXISTS cashplay.customer_docs CASCADE;
+CREATE TABLE cashplay.customer_docs (
+  id            SERIAL PRIMARY KEY,
+  customer_id INTEGER REFERENCES cashplay.customers (id) ON DELETE CASCADE,
+  img TEXT NOT NULL
+);
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON cashplay.customer_docs TO cashplay_user;
+GRANT USAGE ON SEQUENCE cashplay.customer_docs_id_seq TO cashplay_user;
 
 -------------------------------------------------------------------------------
 --ITEM
@@ -483,5 +498,13 @@ CREATE TRIGGER insert_user_email_fk
 BEFORE INSERT ON
   cashplay.customers
 FOR EACH ROW EXECUTE PROCEDURE cashplay.insert_user_email_fk();
+
+-------------------------------------------------------------------------------
+-- ROW LEVEL SECURITY
+-------------------------------------------------------------------------------
+DROP POLICY IF EXISTS user_all ON cashplay.customers;
+CREATE POLICY user_all ON
+  cashplay.customers
+  TO cashplay_user USING (cashplay_private.current_email() = cashplay.customers.user_email_fk);
 COMMIT;
 
