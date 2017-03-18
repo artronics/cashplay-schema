@@ -1,5 +1,13 @@
+DROP ROLE IF EXISTS cashplay_login;
+CREATE ROLE cashplay_login NOINHERIT LOGIN PASSWORD 'admin';
+
+GRANT cashplay_authenticator TO cashplay_login;
+
 DROP ROLE IF EXISTS cashplay_authenticator;
 CREATE ROLE cashplay_authenticator NOINHERIT;
+
+GRANT USAGE ON SCHEMA cashplay_private TO cashplay_authenticator;
+GRANT SELECT ON TABLE pg_authid TO cashplay_authenticator;
 
 DROP OWNED BY cashplay_anonymous;
 DROP ROLE IF EXISTS cashplay_anonymous;

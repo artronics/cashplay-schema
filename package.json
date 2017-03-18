@@ -5,7 +5,7 @@
   "license": "MIT",
 
   "scripts": {
-    "seed":"psql -U jalal -d cashplay_dev -a -f ./db/utils/seed.sql",
+    "seed":"psql -U jalal -d cashplay -a -f ./db/utils/seed.sql",
     "serve":"postgrest config.conf",
     "migrate":"flyway migrate",
     "delete":"flyway clean"

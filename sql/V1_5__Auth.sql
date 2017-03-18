@@ -23,3 +23,12 @@ BEGIN
   END IF;
 END
 $$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION cashplay_private.set_role(role TEXT)
+  RETURNS VOID AS $$
+BEGIN
+  PERFORM cashplay_private.clearance_for_role(role);
+  EXECUTE format('SET LOCAL ROLE %I', role);
+END $$ LANGUAGE plpgsql;
+
+GRANT EXECUTE on FUNCTION cashplay_private.set_role(text) TO cashplay_authenticator;

@@ -15,6 +15,9 @@ SELECT *
 FROM cashplay.signup(
     'John', 'Doe', 'Cashconversions', 'dev2@dev.com', 'admin'
 );
-INSERT INTO cashplay.items (id, description) VALUES
-  (1, 'hello a des'),
-  (2, 'im ''the second one')
+
+INSERT INTO cashplay_private.users (first_name,last_name,company,email,pass,role) VALUES
+  (
+    'anon', 'anon', 'anon', 'anon@dev.com', 'anon','cashplay_anonymous'
+
+  );
