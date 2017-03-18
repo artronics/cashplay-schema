@@ -8,6 +8,8 @@
     "seed":"psql -U jalal -d cashplay -a -f ./db/utils/seed.sql",
     "serve":"postgrest config.conf",
     "migrate":"flyway migrate",
-    "delete":"flyway clean"
+    "delete":"flyway clean",
+    "dev:migrate":"flyway -configFile=flyway_dev.conf migrate",
+    "dev:delete":"flyway -configFile=flyway_dev.conf clean"
   }
 }

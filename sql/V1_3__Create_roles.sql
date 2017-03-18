@@ -1,26 +1,65 @@
-DROP ROLE IF EXISTS cashplay_login;
-CREATE ROLE cashplay_login NOINHERIT LOGIN PASSWORD 'admin';
+DO
+$body$
+BEGIN
+  IF NOT EXISTS (
+      SELECT *
+      FROM   pg_roles
+      WHERE  rolname = 'cashplay_login') THEN
+
+    CREATE ROLE cashplay_login LOGIN PASSWORD 'admin';
+  END IF;
+END
+$body$;
+
+
+DO
+$body$
+BEGIN
+  IF NOT EXISTS (
+      SELECT *
+      FROM   pg_roles
+      WHERE  rolname = 'cashplay_authenticator') THEN
+
+    CREATE ROLE cashplay_authenticator NOINHERIT ;
+  END IF;
+END
+$body$;
 
 GRANT cashplay_authenticator TO cashplay_login;
-
-DROP ROLE IF EXISTS cashplay_authenticator;
-CREATE ROLE cashplay_authenticator NOINHERIT;
 
 GRANT USAGE ON SCHEMA cashplay_private TO cashplay_authenticator;
 GRANT SELECT ON TABLE pg_authid TO cashplay_authenticator;
 
-DROP OWNED BY cashplay_anonymous;
-DROP ROLE IF EXISTS cashplay_anonymous;
-CREATE ROLE cashplay_anonymous NOLOGIN;
+DO
+$body$
+BEGIN
+  IF NOT EXISTS (
+      SELECT *
+      FROM   pg_roles
+      WHERE  rolname = 'cashplay_anonymous') THEN
+
+    CREATE ROLE cashplay_anonymous NOLOGIN ;
+  END IF;
+END
+$body$;
 
 GRANT cashplay_anonymous TO cashplay_authenticator;
 
 GRANT USAGE ON SCHEMA cashplay, cashplay_private TO cashplay_anonymous;
 GRANT SELECT ON TABLE pg_authid TO cashplay_anonymous;
 
-DROP OWNED BY cashplay_admin;
-DROP ROLE IF EXISTS cashplay_admin;
-CREATE ROLE cashplay_admin NOLOGIN;
+DO
+$body$
+BEGIN
+  IF NOT EXISTS (
+      SELECT *
+      FROM   pg_roles
+      WHERE  rolname = 'cashplay_admin') THEN
+
+    CREATE ROLE cashplay_admin NOLOGIN ;
+  END IF;
+END
+$body$;
 
 GRANT cashplay_admin TO cashplay_authenticator;
 
