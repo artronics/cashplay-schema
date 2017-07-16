@@ -63,3 +63,6 @@ CREATE TRIGGER update_users
 INSTEAD OF INSERT OR UPDATE OR DELETE ON
   cashplay.users
 FOR EACH ROW EXECUTE PROCEDURE update_users();
+
+GRANT SELECT ON TABLE cashplay.users TO cashplay_admin;
+
